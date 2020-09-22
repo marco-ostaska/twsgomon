@@ -19,7 +19,7 @@ Just download and run the binary twsgomon file from whenever you want using `-co
 - `interval` interval cycle it should checks fir updated in event.log
 - `twsgomonlog.path` where it should save twsgomon log
 - `debug.level` being debug the higher debug level information and fatal lowest debug level information. 
-  - The debug levels are: (`debug`, `info`, `warn, `error`, `fatal`) 
+  - The debug levels are: (`debug`, `info`, `warn`, `error`, `fatal`) 
 - `alert.config`: json configuration path to configure what should alert
 
 #### example: 
