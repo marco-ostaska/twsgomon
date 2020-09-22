@@ -1,6 +1,8 @@
-<img src="logo1.png" alt="twsgomon" title="twsgomon" align="right" width="160">
+<img src="logo.png" alt="twsgomon" title="twsgomon" align="right" width="160">
 
 # twsgom⌕n - TWS monitoring 
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/marco-ostaska/twsgomon)](https://goreportcard.com/report/github.com/marco-ostaska/twsgomon)
 
 `twsgom⌕n` is a tool that monitors TWS event.log to check and parse for job abends, job fails, job late, etc with a feature to send webhook to Netcool MessageBus
 
@@ -41,8 +43,8 @@ This file is mounted using [*TWS Appendix A. Job scheduling events format docume
 
 
 - `alerts` an array of alerts 
-- `eventNumber` is the Event Number mentioned on *TWS Appendix A. Job scheduling events format documentation*
-- `PositionalFields` is an array, for mapping see (http://publib.boulder.ibm.com/tividd/td/TWS/SC32-1276-02/en_US/HTML/plusmst70.htm)
+- `eventNumber` is the Event Number mentioned on  [*TWS Appendix A. Job scheduling events format documentation*](http://publib.boulder.ibm.com/tividd/td/TWS/SC32-1276-02/en_US/HTML/plusmst70.htm)
+- `PositionalFields` is an array, for mapping see  [*TWS Appendix A. Job scheduling events format documentation*](http://publib.boulder.ibm.com/tividd/td/TWS/SC32-1276-02/en_US/HTML/plusmst70.htm)
 - `MessageBus` bool param that tells twsgomin if it should send webhook to NetcoolMessageBus
 - `AlertKey` the alertKey Netcool should receive
 - `Severity` Netcool severity 
