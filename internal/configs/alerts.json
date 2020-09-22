@@ -1,0 +1,16 @@
+{
+  "alerts": [
+      {
+        "eventNumber":101,
+        "PositionalFields": ["1:um", "4:quatro"],
+        "MessageBus" : true,
+        "AlertKey" : "twsgomon",
+        "Severity": "2",
+        "MessageBusURL": "http://localhost:31311"
+       },
+       {
+        "eventNumber":103,
+        "PositionalFields": ["1:um", "4:quatro"]
+       }
+    ]
+}
