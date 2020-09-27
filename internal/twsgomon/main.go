@@ -35,7 +35,7 @@ func getFlags() (bool, string) {
 	}
 
 	if *version {
-		fmt.Println("twsgom⌕n version: 0.1.0")
+		fmt.Println("twsgom⌕n version: 0.2.0")
 	}
 
 	return true, *fl
