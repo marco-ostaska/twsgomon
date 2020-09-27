@@ -31,11 +31,11 @@ var dbgLevel = map[string]int{
 // based on debugLevel and debugType levels
 func LogEvent(debugType string, logMessage ...interface{}) {
 	if dbgLevel[ConfigFile.DebugLevel] >= dbgLevel[debugType] {
-		f, err := os.OpenFile(ConfigFile.TwsgomonlogPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		f, err := os.OpenFile(ConfigFile.TwsgomonlogPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 		if err != nil {
 			log.Fatalf("error opening file: %v", err)
 		}
-		defer f.Close()
+		defer CloseFile(f)
 		log.SetOutput(f)
 
 		logMsg := fmt.Sprint(logMessage)

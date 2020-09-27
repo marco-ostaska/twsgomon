@@ -58,6 +58,7 @@ func (e *EventAlerts) checkPosFields(posFields []string) bool {
 		}
 
 		if posFields[i-1] != ss[1] {
+			LogEvent(Debug, "PositionFields2: ", posFields[i-1], ":", ss[1])
 			return false
 		}
 
@@ -70,8 +71,13 @@ func (a *Alerts) parseAlert(eventNum int, EventClass string, PosF []string) {
 	for _, v := range a.Alerts {
 		alert := v.checkEventNum(eventNum)
 
+		LogEvent(Debug, "Alertflag:", alert)
+
 		if alert == true && len(v.PositionalFields) > 0 {
 			alert = v.checkPosFields(PosF)
+		}
+
+		if alert {
 			LogEvent(Info, "This will generate an alert for:", EventClass, eventNum, strings.Join(PosF, " "))
 
 			if v.MessageBus {

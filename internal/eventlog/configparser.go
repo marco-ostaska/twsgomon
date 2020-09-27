@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -25,11 +26,11 @@ type TwsGoMonConfig struct {
 
 // GetConfig opens the configuration file and reads its data
 func GetConfig(s string) []byte {
-	jsonFile, err := os.Open(s)
+	jsonFile, err := os.Open(filepath.Clean(s))
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer jsonFile.Close()
+	defer CloseFile(jsonFile)
 
 	b, err := ioutil.ReadAll(jsonFile)
 	if err != nil {
@@ -37,6 +38,15 @@ func GetConfig(s string) []byte {
 	}
 
 	return b
+}
+
+// CloseFile function to defer, because of G307 (CWE-703): Deferring unsafe method "Close"
+func CloseFile(f *os.File) {
+	err := f.Close()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 
 // UnmarshalIt is responsible to open the event and parse it

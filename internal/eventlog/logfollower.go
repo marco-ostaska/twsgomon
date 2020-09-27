@@ -31,7 +31,7 @@ func (f *LogFile) openFile() {
 		log.Fatalln(err)
 	}
 
-	file, err := os.Open(LogToRead)
+	file, err := os.Open(filepath.Clean(LogToRead))
 	if err != nil {
 		LogEvent(Fatal, err.Error())
 		log.Fatalln(err)
@@ -45,7 +45,8 @@ func (f *LogFile) openFile() {
 // initializing the *LogFile
 func (f *LogFile) NewRead() {
 	f.openFile()
-	defer f.logFile.Close()
+	defer CloseFile(f.logFile)
+
 	LogEvent(Debug, "Opening:", f.TwsgomonlogPath)
 	f.ReadLog()
 }
@@ -84,7 +85,11 @@ func (f *LogFile) ReadLog() {
 
 		if moved {
 			LogEvent(Info, f.EvenlogPath, "is deleted or moved")
-			f.logFile.Close()
+			err := f.logFile.Close()
+			if err != nil {
+				LogEvent(Fatal, err)
+				log.Fatalln(err)
+			}
 			LogEvent(Debug, "closing ", f.EvenlogPath, " file")
 			f.NewRead()
 			continue

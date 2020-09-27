@@ -1,9 +1,9 @@
 {
-    "evenlog.path" : "/home/marcoan/go/src/github.com/marco-ostaska/twsgomon/event.log",
+    "evenlog.path" : "/tmp/event.log",
     "readFromBeginning" : true,
     "interval": 2,
     "twsgomonlog.path" : "/tmp/twsgomon.log",
-    "debug.level" : "info",
+    "debug.level" : "debug",
     "alert.config": "/home/marcoan/go/src/github.com/marco-ostaska/twsgomon/internal/configs/alerts.json"
     
  
