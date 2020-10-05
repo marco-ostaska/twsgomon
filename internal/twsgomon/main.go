@@ -24,6 +24,11 @@ func getFlags() (bool, string) {
 	help := flag.Bool("help", false, "display this help and exit")
 	flag.Parse()
 
+	if *version {
+		fmt.Println("twsgom⌕n version: 0.2.0")
+		return false, ""
+	}
+
 	if *help {
 		flag.Usage()
 		return false, ""
@@ -32,10 +37,6 @@ func getFlags() (bool, string) {
 	if len(*fl) == 0 {
 		flag.Usage()
 		return false, ""
-	}
-
-	if *version {
-		fmt.Println("twsgom⌕n version: 0.2.0")
 	}
 
 	return true, *fl

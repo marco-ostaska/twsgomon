@@ -47,7 +47,7 @@ func (e *EventAlerts) parsePayload(EventClass string, Msg string) {
 
 func (e *EventAlerts) hookMessageBus() {
 	p := e.fmtPayload()
-	url := "http://localhost:31311"
+	url := e.MessageBusURL
 	method := "POST"
 
 	payload := strings.NewReader(p)
