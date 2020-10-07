@@ -2,9 +2,8 @@
   "alerts": [
       {
         "eventNumber":101,
-        "PositionalFields": ["1:um", "4:quatro"],
+        "PositionalFields": ["3:ZCHARM_MOVE_ORIGINALS_TO_QA"],
         "MessageBus" : true,
-        "AlertKey" : "twsgomon",
         "Severity": "2",
         "MessageBusURL": "http://localhost:31311"
        },

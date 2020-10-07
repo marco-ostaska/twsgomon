@@ -164,12 +164,10 @@ func (f *LogFile) parseLine(b []byte, n int) {
 		sn := strings.Split(string(b[:n]), "\n")
 		for _, v := range sn {
 			if len(v) > 0 {
-
 				var eventParser EventLog
 				LogEvent(Debug, "Parsing line:", v)
 				eventParser.ParseIt(v)
 			}
 		}
-
 	}
 }

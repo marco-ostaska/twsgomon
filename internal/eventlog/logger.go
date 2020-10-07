@@ -38,9 +38,9 @@ func LogEvent(debugType string, logMessage ...interface{}) {
 		defer CloseFile(f)
 		log.SetOutput(f)
 
-		logMsg := fmt.Sprint(logMessage)
+		logMsg := fmt.Sprint("", logMessage)
 		logMsg = logMsg[1 : len(logMsg)-1]
-		log.Printf("[%s] %s\n", debugType, logMsg)
+		log.Printf("[%s] %s \n", debugType, logMsg)
 	}
 
 }
