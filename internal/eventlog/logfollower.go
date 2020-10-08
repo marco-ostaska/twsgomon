@@ -4,8 +4,8 @@ package eventlog
 // Adapted for the needs of twsgomon
 
 import (
+	"fmt"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,48 +19,61 @@ type LogFile struct {
 }
 
 // StartFollow starts read config and trigger all the rest
-func (f *LogFile) StartFollow() {
+func (f *LogFile) StartFollow() error {
 	f.TwsGoMonConfig = ConfigFile
-	f.NewRead()
-}
-
-func (f *LogFile) openFile() {
-	LogToRead, err := filepath.Abs(f.EvenlogPath)
-
+	err := f.NewRead()
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
-
-	file, err := os.Open(filepath.Clean(LogToRead))
-	if err != nil {
-		LogEvent(Fatal, err.Error())
-		log.Fatalln(err)
-	}
-
-	f.logFile = file
-
+	return nil
 }
 
 // NewRead starts the log reading cycle
 // initializing the *LogFile
-func (f *LogFile) NewRead() {
-	f.openFile()
+func (f *LogFile) NewRead() error {
+	err := f.openFile()
+	if err != nil {
+		return err
+	}
 	defer CloseFile(f.logFile)
 
 	LogEvent(Debug, "Opening:", f.TwsgomonlogPath)
-	f.ReadLog()
+
+	err = f.ReadLog()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (f *LogFile) openFile() error {
+	LogToRead, err := filepath.Abs(f.EvenlogPath)
+
+	if err != nil {
+		return err
+	}
+
+	file, err := os.Open(filepath.Clean(LogToRead))
+	if err != nil {
+		return err
+	}
+
+	f.logFile = file
+	return nil
+
 }
 
 // ReadLog keeps reading the file looking up for changes
 // It tracks for log rotations
-func (f *LogFile) ReadLog() {
+func (f *LogFile) ReadLog() error {
 	b := make([]byte, 0, 4096)
 
 	for {
 		n, err := f.logFile.Read(b[:cap(b)])
 		if err != nil && err != io.EOF {
 			LogEvent(Fatal, err.Error())
-			log.Fatalln(err)
+			return err
 		}
 
 		if err == io.EOF {
@@ -73,7 +86,7 @@ func (f *LogFile) ReadLog() {
 
 		if terr != nil {
 			LogEvent(Fatal, terr.Error())
-			log.Fatalln("FileTruncatedError: ", err)
+			return fmt.Errorf("FileTruncatedError: %v", err)
 		}
 
 		if truncated {
@@ -88,17 +101,22 @@ func (f *LogFile) ReadLog() {
 			err := f.logFile.Close()
 			if err != nil {
 				LogEvent(Fatal, err)
-				log.Fatalln(err)
+				return err
 			}
 			LogEvent(Debug, "closing ", f.EvenlogPath, " file")
-			f.NewRead()
+			err = f.NewRead()
+			if err != nil {
+				return err
+			}
 			continue
 		}
 		if f.ReadFromBeginning {
 			f.parseLine(b, n)
+
 		}
 		f.ReadFromBeginning = true
 	}
+
 }
 
 // checkForTruncate checks if log file is truncated
@@ -160,16 +178,13 @@ func (f *LogFile) isLogMoved() bool {
 func (f *LogFile) parseLine(b []byte, n int) {
 
 	if n > 0 {
-
 		sn := strings.Split(string(b[:n]), "\n")
 		for _, v := range sn {
 			if len(v) > 0 {
-
 				var eventParser EventLog
 				LogEvent(Debug, "Parsing line:", v)
 				eventParser.ParseIt(v)
 			}
 		}
-
 	}
 }

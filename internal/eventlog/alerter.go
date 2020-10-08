@@ -17,22 +17,26 @@ type EventAlerts struct {
 	EventNumber      int      `json:"eventNumber"`
 	PositionalFields []string `json:"PositionalFields,omitempty"`
 	MessageBus       bool     `json:"MessageBus,omitempty"`
-	AlertKey         string   `json:"AlertKey,omitempty"`
 	Severity         string   `json:"Severity,omitempty"`
-	AlertGroup       string   `json:"AlertGroup,omitempty"`
-	Summary          string   `json:"Summary,omitempty"`
 	Node             string   `json:"Node,omitempty"`
 	MessageBusURL    string   `json:"MessageBusURL,omitempty"`
+	AlertGroup       string
+	Summary          string
+	Identifier       string
+	AlertKey         string
+	PosF             []string
 }
 
 // UnmarshalIt is responsible to open the event and parse it
-func (a *Alerts) UnmarshalIt(s string) {
+func (a *Alerts) UnmarshalIt(s string) error {
 	b := GetConfig(s)
 	err := json.Unmarshal(b, &a)
 
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
+
+	return nil
 }
 
 func (e *EventAlerts) checkEventNum(eventNum int) bool {
@@ -44,6 +48,7 @@ func (e *EventAlerts) checkEventNum(eventNum int) bool {
 }
 
 func (e *EventAlerts) checkPosFields(posFields []string) bool {
+	e.PosF = posFields
 	for _, ps := range e.PositionalFields {
 		ss := strings.Split(ps, ":")
 		i, err := strconv.Atoi(ss[0])

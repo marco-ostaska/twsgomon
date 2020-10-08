@@ -14,17 +14,18 @@ type EventLog struct {
 }
 
 // ParseIt parses the lines of ehte log
-func (e EventLog) ParseIt(s string) {
+func (e EventLog) ParseIt(s string) error {
 	ss := strings.Fields(s)
 	eventNumber, err := strconv.Atoi(ss[0])
 	if err != nil {
 		LogEvent(Warn, "Unable to parse line:", s)
-		return
+		return err
 	}
 	e.EventNumber = eventNumber
 	e.EventClass = eventMap[e.EventNumber]
 	e.PositionalFields = ss[1:]
 	e.logIt()
+	return nil
 
 }
 
@@ -36,7 +37,7 @@ func (e *EventLog) logIt() {
 	LogEvent(Info, "PositionalFields:")
 
 	for i, v := range e.PositionalFields {
-		LogEvent(Info, "         Field", i+1, ":     ", v)
+		LogEvent(Info, "     Field", i+1, ":     ", v)
 	}
 	LogEvent(Info, "[Parser End]")
 
@@ -47,7 +48,11 @@ func (e *EventLog) logIt() {
 func (e *EventLog) alerter() {
 	var alert Alerts
 	LogEvent(Debug, "Parsing", ConfigFile.AlertConfigFile)
-	alert.UnmarshalIt(ConfigFile.AlertConfigFile)
+	err := alert.UnmarshalIt(ConfigFile.AlertConfigFile)
+	if err != nil {
+		LogEvent(Error, " Unable to read Alert config file ", ConfigFile.AlertConfigFile)
+		return
+	}
 	alert.parseAlert(e.EventNumber, e.EventClass, e.PositionalFields)
 }
 

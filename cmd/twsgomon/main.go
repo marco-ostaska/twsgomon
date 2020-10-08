@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 
 	"github.com/marco-ostaska/twsgomon/internal/eventlog"
 )
@@ -22,7 +23,13 @@ func getFlags() (bool, string) {
 	version := flag.Bool("version", false, "display twsgomon version")
 	fl := flag.String("config", "", "Json configuration file for twsgom⌕n")
 	help := flag.Bool("help", false, "display this help and exit")
+
 	flag.Parse()
+
+	if *version {
+		fmt.Println("twsgom⌕n version: 0.4.0")
+		return false, ""
+	}
 
 	if *help {
 		flag.Usage()
@@ -34,10 +41,6 @@ func getFlags() (bool, string) {
 		return false, ""
 	}
 
-	if *version {
-		fmt.Println("twsgom⌕n version: 0.2.0")
-	}
-
 	return true, *fl
 }
 
@@ -46,12 +49,22 @@ func startMeUp(f string) {
 
 	fmt.Println("Starting twsgom⌕n")
 
-	eventlog.ConfigFile.UnmarshalIt(f)
+	err := eventlog.ConfigFile.UnmarshalIt(f)
+	if err != nil {
+		eventlog.LogEvent(eventlog.Fatal, "Unable to marshal f: ", err)
+		log.Fatalln(err)
+	}
 	eventlog.LogEvent(eventlog.Info, "Starting twsgom⌕n")
 
 	// following log
 	var e eventlog.LogFile
 	e.EvenlogPath = eventlog.ConfigFile.EvenlogPath
-	e.StartFollow()
+
+	err = e.StartFollow()
+
+	if err != nil {
+		eventlog.LogEvent(eventlog.Fatal, "Failed to read log ", err)
+		log.Fatalln(err)
+	}
 
 }
