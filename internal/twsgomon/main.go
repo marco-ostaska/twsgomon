@@ -23,10 +23,11 @@ func getFlags() (bool, string) {
 	version := flag.Bool("version", false, "display twsgomon version")
 	fl := flag.String("config", "", "Json configuration file for twsgom⌕n")
 	help := flag.Bool("help", false, "display this help and exit")
+
 	flag.Parse()
 
 	if *version {
-		fmt.Println("twsgom⌕n version: 0.2.0")
+		fmt.Println("twsgom⌕n version: 0.4.0")
 		return false, ""
 	}
 
