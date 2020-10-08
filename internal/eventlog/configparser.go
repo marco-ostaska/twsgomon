@@ -43,18 +43,19 @@ func GetConfig(s string) []byte {
 // CloseFile function to defer, because of G307 (CWE-703): Deferring unsafe method "Close"
 func CloseFile(f *os.File) {
 	err := f.Close()
-
 	if err != nil {
 		log.Fatalln(err)
 	}
 }
 
 // UnmarshalIt is responsible to open the event and parse it
-func (t *TwsGoMonConfig) UnmarshalIt(s string) {
+func (t *TwsGoMonConfig) UnmarshalIt(s string) error {
 	b := GetConfig(s)
 	err := json.Unmarshal(b, &t)
 
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
+
+	return nil
 }

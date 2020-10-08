@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 
 	"github.com/marco-ostaska/twsgomon/internal/eventlog"
 )
@@ -47,12 +48,22 @@ func startMeUp(f string) {
 
 	fmt.Println("Starting twsgom⌕n")
 
-	eventlog.ConfigFile.UnmarshalIt(f)
+	err := eventlog.ConfigFile.UnmarshalIt(f)
+	if err != nil {
+		eventlog.LogEvent(eventlog.Fatal, "Unable to marshal f: ", err)
+		log.Fatalln(err)
+	}
 	eventlog.LogEvent(eventlog.Info, "Starting twsgom⌕n")
 
 	// following log
 	var e eventlog.LogFile
 	e.EvenlogPath = eventlog.ConfigFile.EvenlogPath
-	e.StartFollow()
+
+	err = e.StartFollow()
+
+	if err != nil {
+		eventlog.LogEvent(eventlog.Fatal, "Failed to read log ", err)
+		log.Fatalln(err)
+	}
 
 }

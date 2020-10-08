@@ -28,13 +28,15 @@ type EventAlerts struct {
 }
 
 // UnmarshalIt is responsible to open the event and parse it
-func (a *Alerts) UnmarshalIt(s string) {
+func (a *Alerts) UnmarshalIt(s string) error {
 	b := GetConfig(s)
 	err := json.Unmarshal(b, &a)
 
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
+
+	return nil
 }
 
 func (e *EventAlerts) checkEventNum(eventNum int) bool {

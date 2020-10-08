@@ -2,7 +2,7 @@
   "alerts": [
       {
         "eventNumber":101,
-        "PositionalFields": ["3:ZCHARM_MOVE_ORIGINALS_TO_QA"],
+        "PositionalFields": ["3:JOBABC"],
         "MessageBus" : true,
         "Severity": "2",
         "MessageBusURL": "http://localhost:31311"

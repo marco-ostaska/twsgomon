@@ -30,13 +30,7 @@ func (e *EventAlerts) fmtPayload() string {
 }
 
 func (e *EventAlerts) parsePayload(EventClass string, Msg string) {
-	if len(e.Node) == 0 {
-		node, err := os.Hostname()
-		if err != nil {
-			log.Fatalln(err)
-		}
-		e.Node = node
-	}
+	e.nodeName()
 
 	e.AlertGroup = EventClass
 	switch e.AlertGroup {
@@ -51,6 +45,16 @@ func (e *EventAlerts) parsePayload(EventClass string, Msg string) {
 
 	LogEvent(Info, "Node found in configuration file, will not use machine hostname, will use", e.Node, "instead")
 
+}
+
+func (e *EventAlerts) nodeName() {
+	if len(e.Node) == 0 {
+		node, err := os.Hostname()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		e.Node = node
+	}
 }
 
 func (e *EventAlerts) hookMessageBus() {
