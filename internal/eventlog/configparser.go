@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// ConfigFile will be need in multiple ocasion
+// ConfigFile will be need in multiple occasion
 var ConfigFile TwsGoMonConfig
 
 // TwsGoMonConfig is the struct to for twsgomon json configuration file
